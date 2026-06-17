@@ -1,0 +1,31 @@
+name: CI
+
+# Когда запускать: при пуше в любую ветку и при открытии Pull Request в main.
+on:
+  push:
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    name: Build & check
+    runs-on: ubuntu-latest
+    steps:
+      # 1. Скачиваем код репозитория на виртуалку
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # 2. Ставим Node.js и включаем кэш зависимостей yarn (ускоряет повторные запуски)
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: yarn
+
+      # 3. Устанавливаем зависимости строго по yarn.lock
+      - name: Install dependencies
+        run: yarn install --frozen-lockfile
+
+      # 4. Собираем проект — если сборка падает, CI краснеет
+      - name: Build
+        run: yarn build
