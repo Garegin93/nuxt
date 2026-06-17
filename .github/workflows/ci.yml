@@ -26,6 +26,10 @@ jobs:
       - name: Install dependencies
         run: yarn install --frozen-lockfile
 
-      # 4. Собираем проект — если сборка падает, CI краснеет
+      # 4. Проверяем код линтером — если есть ошибки стиля/кода, CI краснеет
+      - name: Lint
+        run: yarn lint
+
+      # 5. Собираем проект — если сборка падает, CI краснеет
       - name: Build
         run: yarn build
